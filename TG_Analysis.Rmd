@@ -1,0 +1,59 @@
+---
+title: "Analysis of the ToothGrowth data in R"
+author: "Rinnette Ramdhanie"
+date: "13 November 2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r loadDataLib, warning = FALSE, message = FALSE}
+        data(ToothGrowth)        
+        library(ggplot2)
+
+```
+## Overview
+
+
+
+
+#Exploratory Analysis
+
+
+```{r summary}
+        str(ToothGrowth)
+        unique(ToothGrowth$dose)
+        head(ToothGrowth)
+```
+
+The data consists of 60 rows and 3 variables: len, supp and dose.
+
+* len: length of the odontoplasts in 60 guinea pigs
+* supp: delivery method which can be one of two - orange juice (OJ) and ascorbic acid (VC)
+* dose: three doses - 0.5, 1.0, or 2.0
+
+```{r plotData}
+        ggplot(data = ToothGrowth, aes(x = supp, y = len)) +
+                geom_boxplot(aes(fill = supp)) +
+                facet_wrap(~ dose)
+
+```
+
+Observations:
+
+* Generally orange juice was a better source of Vitamin C causing the odontoplasts to grow longer for doses 0.5 and 1.
+* A higher dose using either delivery method increased growth
+* and some more stuff ... 
+
+## Tests
+ 
+
+## Results
+
+
+## Conclusion
+
+Assumptions go here
+
