@@ -9,7 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r loadDataLib, echo = FALSE, warning = FALSE, message = FALSE}
+```{r loadDataLib,  warning = FALSE, message = FALSE}
         # Load data and libraries        
                 data(ToothGrowth)        
                 library(ggplot2)
@@ -20,10 +20,10 @@ knitr::opts_chunk$set(echo = FALSE)
 
 
 
-##Exploratory Analysis
-The structure of the dataframe was checked as well as the different doses adminstered and the first few rows of data.
+## Exploratory Analysis
+A summary of the data and the structure of the dataframe were checked as well as the different doses administered and the first few rows of data.
 
-```{r summary, echo = TRUE}
+```{r summary}
         # Summary of data        
         summary(ToothGrowth)
         str(ToothGrowth)
@@ -34,8 +34,15 @@ The structure of the dataframe was checked as well as the different doses admins
 The data consists of 60 rows and 3 variables: len, supp and dose.
 
 * len: length of the odontoplasts in 60 guinea pigs
-* supp: delivery method which can be administered using one of two supplements - orange juice (OJ) and ascorbic acid (VC)
+* supp: delivery method which can be administered using one of two supplements - orange juice or ascorbic acid (vitamin C).
 * dose: three doses, 0.5, 1.0, and 2.0 milligrams per day, were administered for each delivery method
+
+The figure below shows a boxplot of teeth length against type of supplement for each dosage.
+
+Initial observations:
+
+* Generally it seems like orange juice was a better source of Vitamin C causing the odontoplasts to grow longer with doses of 0.5 mg and 1.0 mg.  At a dosage of 2.0 mg there was a wider range of growth length with ascorbic acid even though the medians are about the same for both supplement types.
+* A higher dose using either delivery method increased growth.
 
 ```{r plotData, fig.width=7,fig.height=3}
         # Boxplot of teeth length against supplement for each dose
@@ -44,100 +51,89 @@ The data consists of 60 rows and 3 variables: len, supp and dose.
                 facet_wrap(~ dose) +
                 labs(title = "Tooth growth by dosage and type of supplement", 
                      x = "Type of Supplement", y = "Length of teeth")
-
 ```
-
-Initial Observations:
-
-* Generally it seems like orange juice was a better source of Vitamin C causing the odontoplasts to grow longer for doses of 0.5 mg and 1.0 mg.
-* A higher dose using either delivery method increased growth.
 
 ## Tests
-All testing was done using a 5% significance level ie. alpha is 0.05.  The p-values are displayed for each test.
+All tests were done using a 5% significance level ie. alpha is 0.05.  The results are displayed for each test.
 
-### Comparing effects of supplements on tooth growth
-Let $\mu_{oj}$ be the mean of tooth length of guinea pigs who was given orange juice and $\mu_{vc}$ the mean of tooth length of guinea pigs given ascorbic acid (vitamin C) ie. 
-        $H_{0}: \mu_{oj} - \mu_{vc} = 0$
-        $H_{a}: \mu_{oj} - \mu_{vc} > 0$
+### Comparing the effect of supplement type on tooth growth
+*Test 1*
 
+Let $\mu_{oj}$ be the mean of tooth length for guinea pigs who were given orange juice and $\mu_{vc}$ the mean of tooth length of guinea pigs given ascorbic acid. The following hypotheses were tested: $H_{0}: \mu_{oj} - \mu_{vc} = 0$ and $H_{a}: \mu_{oj} - \mu_{vc} > 0$.
+
+\tiny
 ```{r}
-        oj <- ToothGrowth$len[ToothGrowth$supp == 'OJ']
-        vc <- ToothGrowth$len[ToothGrowth$supp == 'VC']
-        t.test(oj, vc, paired = FALSE, var.equal = FALSE, alternative = "greater")$p.value
+        # Comparing effects of supplement type on tooth growth
+                oj <- ToothGrowth$len[ToothGrowth$supp == 'OJ']
+                vc <- ToothGrowth$len[ToothGrowth$supp == 'VC']
+                t.test(oj, vc, alternative = "greater")
 ```
+\normalsize
 
-Since the p-value is 0.03032 which is less than alpha, 0.05, $H_{0}$ is rejected in favor of $H_{a}$.  This means that there is storng evidence to support a difference in tooth growth between guinea pigs administered with orange juice and those administered with vitamin C.
+The results of the test show that $H_0$ was rejected in favor of $H_a$ since the "true difference in means is greater than zero"
 
 ### Comparing effects of dosage on tooth growth
 
-For each of the supplements the following was tested:
+For each of the supplements the following were tested:
 
-* difference in tooth growth between dose 0.5 mg and 1.0 mg
-* difference in tooth growth between dose 1.0 mg and 2.0 mg
+* difference in tooth growth between doses 0.5 mg and 1.0 mg (Tests 2 and 4)
+* difference in tooth growth between doses 1.0 mg and 2.0 mg (Tests 3 and 5)
 
+The p-value for each test is shown.  If p-value < 0.05 then this proves that there is a statistical difference between the two means and $H_0$ is rejected in favour of $H_a$.
 
-#### Comparing 0.5mg dosage with 1.0 mg of orange juice
+*Test 2: Comparing 0.5 mg with 1.0 mg of orange juice*
 
-Let $\mu_{0.5}$ be the mean of tooth length of guinea pigs who was give 0.5 mg of the supplement and $\mu_{1.0}$ the mean of tooth length of guinea pigs given 1.0 mg of the supplement. 
-        $H_{0}: \mu_{1.0}-\mu_{0.5} = 0$
-        $H_{a}: \mu_{1.0}-\mu_{0.5} > 0$
-        
-```{r echo = TRUE}
+Let $\mu_{0.5}$ be the mean of tooth length of guinea pigs who were given 0.5 mg of orange juice and $\mu_{1.0}$ the mean of tooth length of guinea pigs given 1.0 mg of orange juice. The following hypotheses were tested: $H_{0}: \mu_{1.0}-\mu_{0.5} = 0$ and $H_{a}: \mu_{1.0}-\mu_{0.5} > 0$.
+
+```{r}
         g1 <- filter(ToothGrowth, supp == "OJ", dose == 0.5)$len
         g2 <- filter(ToothGrowth, supp == "OJ", dose == 1.0)$len
-        t.test(g2, g1, paired = FALSE, var.equal = FALSE, alternative = "greater")$p.value
+        t.test(g2, g1, alternative = "greater")$p.value
 ```
 
-Since the p-value is 4.39246e-05 which is less than alpha, 0.05, $H_{0}$ is rejected in favor of $H_{a}$.  This means that there is a definite difference in tooth growth between guinea pigs administered with 0.5 mg orange juice and those administered with 1.0 mg vitamin C.
 
+*Test 3: Comparing 1.0 mg with 2.0 mg of orange juice*
 
-#### Comparing 1.0 mg dosage with 2.0 mg of orange juice
-Let $\mu_{1.0}$ be the mean of tooth length of guinea pigs who was give 1.0 mg of the supplement and $\mu_{2.0}$ the mean of tooth length of guinea pigs given 1.0 mg of the supplement. 
-        $H_{0}: \mu_{2.0} - \mu_{1.0} = 0$
-        $H_{a}: \mu_{2.0} - \mu_{1.0} > 0$
+Let $\mu_{1.0}$ be the mean of tooth length of guinea pigs who were given 1.0 mg of orange juice and $\mu_{2.0}$ the mean tooth length of guinea pigs who were given 2.0 mg of orange juice. The following hypotheses were tested:   $H_{0}: \mu_{2.0} - \mu_{1.0} = 0$ and $H_{a}: \mu_{2.0} - \mu_{1.0} > 0$.
         
-```{r echo = TRUE}
+```{r}
         g1 <- filter(ToothGrowth, supp == "OJ", dose == 1.0)$len
         g2 <- filter(ToothGrowth, supp == "OJ", dose == 2.0)$len
-        t.test(g2, g1, paired = FALSE, var.equal = FALSE, alternative = "greater")$p.value
+        t.test(g2, g1, alternative = "greater")$p.value
 ```
 
-Since the p-value is 0.0196 which is less than alpha, 0.05, $H_{0}$ is rejected in favor of $H_{a}$.  This means that there is a definite difference in tooth growth between guinea pigs administered with 1.0 mg of orange juice and those administered with 2.0 mg.
 
-#### Comparing 0.5mg dosage with 1.0 mg of vitamin C
+*Test 4: Comparing 0.5mg with 1.0 mg of vitamin C*
 
-Let $\mu_{0.5}$ be the mean of tooth length of guinea pigs who was give 0.5 mg of the supplement and $\mu_{1.0}$ the mean of tooth length of guinea pigs given 1.0 mg of the supplement. 
-        $H_{0}: \mu_{1.0} - \mu_{0.5} = 0$
-        $H_{a}: \mu_{1.0} - \mu_{0.5} > 0$
+Let $\mu_{0.5}$ be the mean tooth length of guinea pigs who were given 0.5 mg of vitamin C and $\mu_{1.0}$ the mean tooth length of guinea pigs given 1.0 mg of vitamin C. The following hypotheses were tested: $H_{0}: \mu_{1.0} - \mu_{0.5} = 0$ and $H_{a}: \mu_{1.0} - \mu_{0.5} > 0$.
         
-```{r echo = TRUE}
+```{r}
         g1 <- filter(ToothGrowth, supp == "VC", dose == 0.5)$len
         g2 <- filter(ToothGrowth, supp == "VC", dose == 1.0)$len
-        t.test(g2, g1, paired = FALSE, var.equal = FALSE, alternative = "greater")$p.value
+        t.test(g2, g1, alternative = "greater")$p.value
 ```
 
-Since the p-value is 3.41e-07 which is much less than alpha, 0.05, $H_{0}$ is rejected in favor of $H_{a}$.  This means that there is very strong evidence to support a difference in tooth growth between guinea pigs administered with 0.5 mg of vitamin C and those administered with 1.0 mg vitamin C.
 
-
-#### Comparing 1.0 mg dosage with 2.0 mg of orange juice
-Let $\mu_{1.0}$ be the mean of tooth length of guinea pigs who was give 1.0 mg of the supplement and $\mu_{2.0}$ the mean of tooth length of guinea pigs given 1.0 mg of the supplement. 
-        $H_{0}: \mu_{2.0} - \mu_{1.0} = 0$
-        $H_{a}: \mu_{2.0} - \mu_{1.0} > 0$
+*Test 5: Comparing 1.0 mg with 2.0 mg of orange juice*
+Let $\mu_{1.0}$ be the mean tooth length of guinea pigs who were give 1.0 mg of vitamin C and $\mu_{2.0}$ the mean tooth length of guinea pigs given 1.0 mg of vitamin C. The following hypotheses were tested: $H_{0}: \mu_{2.0} - \mu_{1.0} = 0$ and $H_{a}: \mu_{2.0} - \mu_{1.0} > 0$.
         
-```{r echo = TRUE}
+```{r}
         g1 <- filter(ToothGrowth, supp == "VC", dose == 1.0)$len
         g2 <- filter(ToothGrowth, supp == "VC", dose == 2.0)$len
-        t.test(g2, g1, paired = FALSE, var.equal = FALSE, alternative = "greater")$p.value
+        t.test(g2, g1, alternative = "greater")$p.value
 ```
 
-Since the p-value is 4.58e-05 which is much less than alpha, 0.05, $H_{0}$ is rejected in favor of $H_{a}$.  This means that there is very strong evidence to support a difference in tooth growth between guinea pigs administered with 1.0 mg of vitamin C and those administered with 2.0 mg vitamin C.
 
 ## Results
+The results in all tests show p-values less tha 0.05 supporting the alternative hypotheses that the true difference in means is not equal to 0, ie. there is a statistical difference between the two means in each case being tested.
 
 
 ## Conclusion
 
 Assumptions go here
+
+* Data conforms to a normal distribution.
+
 
 ## Appendix
 ```{r ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
