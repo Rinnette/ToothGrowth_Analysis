@@ -9,7 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r loadDataLib, warning = FALSE, message = FALSE}
+```{r loadDataLib, echo = FALSE, warning = FALSE, message = FALSE}
         data(ToothGrowth)        
         library(ggplot2)
 
@@ -19,8 +19,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 
-#Exploratory Analysis
-
+##Exploratory Analysis
+The structure of the dataframe was checked as well as the different doses adminstered and the first few rows of data.
 
 ```{r summary}
         str(ToothGrowth)
@@ -31,13 +31,15 @@ knitr::opts_chunk$set(echo = TRUE)
 The data consists of 60 rows and 3 variables: len, supp and dose.
 
 * len: length of the odontoplasts in 60 guinea pigs
-* supp: delivery method which can be one of two - orange juice (OJ) and ascorbic acid (VC)
-* dose: three doses - 0.5, 1.0, or 2.0
+* supp: delivery method which can be administered using one of two supplements - orange juice (OJ) and ascorbic acid (VC)
+* dose: three doses, 0.5, 1.0, and 2.0 milligrams per day, were administered for each delivery method
 
 ```{r plotData}
         ggplot(data = ToothGrowth, aes(x = supp, y = len)) +
                 geom_boxplot(aes(fill = supp)) +
-                facet_wrap(~ dose)
+                facet_wrap(~ dose) +
+                labs(title = "Tooth growth by dosage and type of supplement", 
+                     x = "Type of Supplement", y = "Length of teeth")
 
 ```
 
@@ -48,7 +50,25 @@ Observations:
 * and some more stuff ... 
 
 ## Tests
- 
+### Comparing effects of supplements on tooth growth
+Let $\mu_{oj}$ be the mean of tooth length of guinea pigs who was given orange juice and $\mu_{vc}$ the mean of tooth length of guinea pigs given ascorbic acid (vitamin C).
+
+        $H_{0}: \mu_{oj}-\mu_{vc} = 0$
+        $H_{a}: \mu_{oj}-\mu_{vc} > 0$
+        
+        Testing on a 5% significance level ie. alpha is 0.05.
+```{r}
+        oj <- ToothGrowth$len[ToothGrowth$supp == 'OJ']
+        vc <- ToothGrowth$len[ToothGrowth$supp == 'VC']
+        t.test(oj, vc, paired = FALSE, var.equal = FALSE, alternative = "greater")$p.value
+```
+
+Since the p-value is 0.03032 which is less than alpha, 0.05, $H_{0}$ is rejected in favor of $H_{a}$.  This means that there is a definite difference in tooth growth between pigs administered with orange juice and those administered with vitamin C.
+
+### Comparing effects of dosage on tooth growth
+
+
+
 
 ## Results
 
