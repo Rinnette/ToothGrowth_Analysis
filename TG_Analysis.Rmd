@@ -59,7 +59,7 @@ All tests were done using a 5% significance level ie. alpha is 0.05.  The result
 ### Comparing the effect of supplement type on tooth growth
 *Test 1*
 
-Let $\mu_{oj}$ be the mean tooth length for guinea pigs that were given orange juice and $\mu_{vc}$ the mean tooth length of guinea pigs given ascorbic acid. The following hypotheses were tested: $H_{0}: \mu_{oj} - \mu_{vc} = 0$ and $H_{a}: \mu_{oj} - \mu_{vc} > 0$.
+Let $\mu_{oj}$ be the mean tooth length for guinea pigs that were given orange juice and $\mu_{vc}$ the mean tooth length of guinea pigs given vitamin C. The following hypotheses were tested: $H_{0}: \mu_{oj} - \mu_{vc} = 0$ and $H_{a}: \mu_{oj} - \mu_{vc} > 0$.
 
 \scriptsize
 ```{r}
@@ -70,7 +70,7 @@ Let $\mu_{oj}$ be the mean tooth length for guinea pigs that were given orange j
 ```
 \normalsize
 
-The results of the test show that $H_0$ was rejected in favor of $H_a$ and the "true difference in means is greater than zero".  Therefore orange juice has a statistically significant effect on tooth growth than vitamin C.
+The results of the test showed that $H_0$ was rejected in favor of $H_a$ and the "true difference in means is greater than zero".  Therefore orange juice has a statistically significant effect on tooth growth than vitamin C.
 
 ### Comparing the effect of dosage on tooth growth
 
@@ -86,9 +86,10 @@ The p-value for each test is shown.  If $p.value < 0.05$ then this proves that t
 Let $\mu_{0.5}$ be the mean tooth length of guinea pigs that were given 0.5 mg of orange juice and $\mu_{1.0}$ the mean tooth length of guinea pigs given 1.0 mg of orange juice. The following hypotheses were tested: $H_{0}: \mu_{1.0}-\mu_{0.5} = 0$ and $H_{a}: \mu_{1.0}-\mu_{0.5} > 0$.
 
 ```{r}
-        g1 <- filter(ToothGrowth, supp == "OJ", dose == 0.5)$len
-        g2 <- filter(ToothGrowth, supp == "OJ", dose == 1.0)$len
-        t.test(g2, g1, alternative = "greater")$p.value
+        # Comparing effects of dosage on tooth growth        
+                g1 <- filter(ToothGrowth, supp == "OJ", dose == 0.5)$len
+                g2 <- filter(ToothGrowth, supp == "OJ", dose == 1.0)$len
+                t.test(g2, g1, alternative = "greater")$p.value
 ```
 
 
@@ -97,9 +98,9 @@ Let $\mu_{0.5}$ be the mean tooth length of guinea pigs that were given 0.5 mg o
 Let $\mu_{1.0}$ be the mean tooth length of guinea pigs that were given 1.0 mg of orange juice and $\mu_{2.0}$ the mean tooth length of guinea pigs given 2.0 mg of orange juice. The following hypotheses were tested:   $H_{0}: \mu_{2.0} - \mu_{1.0} = 0$ and $H_{a}: \mu_{2.0} - \mu_{1.0} > 0$.
         
 ```{r}
-        g1 <- filter(ToothGrowth, supp == "OJ", dose == 1.0)$len
-        g2 <- filter(ToothGrowth, supp == "OJ", dose == 2.0)$len
-        t.test(g2, g1, alternative = "greater")$p.value
+                g1 <- filter(ToothGrowth, supp == "OJ", dose == 1.0)$len
+                g2 <- filter(ToothGrowth, supp == "OJ", dose == 2.0)$len
+                t.test(g2, g1, alternative = "greater")$p.value
 ```
 
 
@@ -108,9 +109,9 @@ Let $\mu_{1.0}$ be the mean tooth length of guinea pigs that were given 1.0 mg o
 Let $\mu_{0.5}$ be the mean tooth length of guinea pigs that were given 0.5 mg of vitamin C and $\mu_{1.0}$ the mean tooth length of guinea pigs given 1.0 mg of vitamin C. The following hypotheses were tested: $H_{0}: \mu_{1.0} - \mu_{0.5} = 0$ and $H_{a}: \mu_{1.0} - \mu_{0.5} > 0$.
         
 ```{r}
-        g1 <- filter(ToothGrowth, supp == "VC", dose == 0.5)$len
-        g2 <- filter(ToothGrowth, supp == "VC", dose == 1.0)$len
-        t.test(g2, g1, alternative = "greater")$p.value
+                g1 <- filter(ToothGrowth, supp == "VC", dose == 0.5)$len
+                g2 <- filter(ToothGrowth, supp == "VC", dose == 1.0)$len
+                t.test(g2, g1, alternative = "greater")$p.value
 ```
 
 
@@ -118,9 +119,9 @@ Let $\mu_{0.5}$ be the mean tooth length of guinea pigs that were given 0.5 mg o
 Let $\mu_{1.0}$ be the mean tooth length of guinea pigs that were given 1.0 mg of vitamin C and $\mu_{2.0}$ the mean tooth length of guinea pigs given 1.0 mg of vitamin C. The following hypotheses were tested: $H_{0}: \mu_{2.0} - \mu_{1.0} = 0$ and $H_{a}: \mu_{2.0} - \mu_{1.0} > 0$.
         
 ```{r}
-        g1 <- filter(ToothGrowth, supp == "VC", dose == 1.0)$len
-        g2 <- filter(ToothGrowth, supp == "VC", dose == 2.0)$len
-        t.test(g2, g1, alternative = "greater")$p.value
+                g1 <- filter(ToothGrowth, supp == "VC", dose == 1.0)$len
+                g2 <- filter(ToothGrowth, supp == "VC", dose == 2.0)$len
+                t.test(g2, g1, alternative = "greater")$p.value
 ```
 
 
@@ -131,8 +132,9 @@ In the first test $H_0$ was rejected in favour of $H_a$.  In the remaining tests
 ## Conclusion
 It was assumed that the data is normally distributed and that the groups used in the testing were independent, normally distributed and had unequal variances.
 
-The first test showed that since $\mu_{oj} > \mu_{vc}$, orange juice has a statistically more significant effect than vitamin C on tooth growth.  Similarly, in the remaining tests, since $\mu_{larger dose} > \mu_{smaller dose}$ in each case no matter the supplement used, it means that statistically, a larger dose of either of the two supplements will will have a significantly greater effect on tooth growth compared to a smaller dose.
+The first test showed that since $\mu_{oj} > \mu_{vc}$, orange juice has a statistically significant greater effect than vitamin C on tooth growth.  Similarly, in the remaining tests, since $\mu_{larger dose} > \mu_{smaller dose}$ in each case no matter the supplement used, it means that a larger dose of either of the two supplements will have a statistically significantly greater effect on tooth growth compared to a smaller dose.
 
+\pagebreak
 ## Appendix
 ```{r ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
 ```
